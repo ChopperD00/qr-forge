@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Forge</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--bg:#09090b;--s:#18181b;--s2:#27272a;--bd:#3f3f46;--t:#fafafa;--m:#a1a1aa;--d:#71717a;--a:#a78bfa;--a2:#7c3aed;--g:#4ade80;--r:#f87171;--mn:'JetBrains Mono',monospace;--sn:'DM Sans',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--t);font-family:var(--sn);min-height:100vh;-webkit-font-smoothing:antialiased}.app{max-width:900px;margin:0 auto;padding:24px}.hd{text-align:center;margin-bottom:32px}.hd h1{font-family:var(--mn);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--a);margin-bottom:4px}.hd p{font-size:14px;color:var(--m)}.gr{display:grid;grid-template-columns:1fr 1fr;gap:24px}@media(max-width:700px){.gr{grid-template-columns:1fr}}.pn{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:20px}.pt{font-family:var(--mn);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--d);margin-bottom:16px}label{display:block;font-size:13px;color:var(--m);margin-bottom:6px}input[type=text],input[type=number],textarea,select{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;color:var(--t);font-family:var(--sn);font-size:14px;outline:none}input:focus,textarea:focus,select:focus{border-color:var(--a)}textarea{resize:vertical;min-height:80px}.fd{margin-bottom:14px}.ps{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}.pr{padding:6px 12px;border:1px solid var(--bd);border-radius:20px;font-size:12px;color:var(--m);cursor:pointer;background:transparent;font-family:var(--sn)}.pr:hover,.pr.ac{border-color:var(--a);color:var(--a);background:rgba(167,139,250,.08)}.rw{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bt{width:100%;padding:14px;background:var(--a2);color:white;border:none;border-radius:10px;font-family:var(--mn);font-size:13px;font-weight:600;letter-spacing:.05em;cursor:pointer;margin-top:8px}.bt:hover{background:var(--a)}.bt:disabled{opacity:.4;cursor:not-allowed}.ou{min-height:300px;display:flex;align-items:center;justify-content:center}.ou img{max-width:100%;border-radius:8px}.ph{color:var(--d);font-size:13px;text-align:center}.st{font-family:var(--mn);font-size:11px;color:var(--m);text-align:center;margin-top:12px}.st.ok{color:var(--g)}.st.er{color:var(--r)}.qp{display:flex;justify-content:center;margin:12px 0;background:white;border-radius:8px;padding:12px}.ac2{display:flex;gap:8px;margin-top:12px}.ac2 button{flex:1;padding:10px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--t);font-family:var(--mn);font-size:11px;cursor:pointer}.ac2 button:hover{border-color:var(--a);color:var(--a)}.ld{width:32px;height:32px;border:3px solid var(--s2);border-top-color:var(--a);border-radius:50%;animation:sp .8s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}.sb{font-family:var(--mn);font-size:9px;color:var(--d);text-align:center;margin-top:32px;letter-spacing:.08em}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="app">
+<div class="hd"><h1>QR Forge</h1><p>AI-powered artistic QR codes that still scan</p></div>
+<div class="gr">
+<div><div class="pn">
+<div class="pt">Input</div>
+<div class="fd"><label>URL or Text</label><input type="text" id="qc" value="https://unisec.dev" placeholder="https://yoursite.com"></div>
+<div class="pt" style="margin-top:20px">QR Preview</div>
+<div class="qp" id="qp"></div>
+<div class="fd"><label>Style Preset</label><div class="ps" id="ps"></div></div>
+<div class="fd"><label>Custom Prompt</label><textarea id="pm" placeholder="Describe the art style..."></textarea></div>
+<div class="fd"><label>Negative Prompt</label><textarea id="np" rows="2">ugly, disfigured, low quality, blurry, nsfw</textarea></div>
+<div class="rw"><div class="fd"><label>Model</label><select id="md"><option value="controlnet">QR ControlNet (SD 2.1)</option><option value="illusion">Illusion (patterns)</option></select></div><div class="fd"><label>Seed (-1 = random)</label><input type="number" id="sd" value="-1"></div></div>
+<div class="rw"><div class="fd"><label>ControlNet Strength</label><input type="number" id="cs" value="1.5" step="0.1" min="0.5" max="3"></div><div class="fd"><label>Guidance Scale</label><input type="number" id="gs" value="7.5" step="0.5" min="1" max="20"></div></div>
+<div class="fd"><label>Steps</label><input type="number" id="st" value="30" min="10" max="50"></div>
+<button class="bt" id="gb" onclick="gen()">GENERATE</button>
+</div></div>
+<div><div class="pn">
+<div class="pt">Output</div>
+<div class="ou" id="ou"><div class="ph">Generated QR art will appear here</div></div>
+<div class="st" id="ss"></div>
+<div class="ac2" id="ac" style="display:none"><button onclick="dl()">Download PNG</button><button onclick="ts()">Test Scan</button></div>
+</div></div>
+</div>
+<div class="sb">QR FORGE &middot; SECRET MENU LLC &middot; UNISEC</div>
+</div>
+<script>
+var P=[{n:'Cyberpunk',p:'cyberpunk city street, neon lights, rain reflections, futuristic, highly detailed, 4k, cinematic'},{n:'Anime',p:'beautiful anime scene, cherry blossoms, studio ghibli style, pastel colors, masterpiece, highly detailed'},{n:'Fantasy',p:'enchanted forest, magical creatures, glowing mushrooms, ethereal light, fantasy art, masterpiece'},{n:'Steampunk',p:'steampunk machinery, brass gears, victorian architecture, steam, clockwork, highly detailed, cinematic'},{n:'Ukiyo-e',p:'ukiyo-e japanese woodblock print, great wave, traditional art, katsushika hokusai style, detailed'},{n:'Geometric',p:'sacred geometry, mandala, fractal patterns, symmetrical, intricate, mathematical art, gold and black'},{n:'Brutalist',p:'brutalist concrete architecture, raw concrete, dramatic shadows, monochrome, editorial photography'},{n:'1-Bit',p:'1-bit pixel art, black and white, dithered, retro game aesthetic, minimalist, high contrast, monochrome'},{n:'NERV',p:'neon genesis evangelion control room, CRT screens, phosphor glow, orange and black, sci-fi console, mecha'},{n:'Vaporwave',p:'vaporwave aesthetic, greek statue, palm trees, sunset, pink and purple, retro 80s, glitch art'}];
+var R=null;
+function ip(){var c=document.getElementById('ps');P.forEach(function(x){var b=document.createElement('button');b.className='pr';b.textContent=x.n;b.onclick=function(){document.querySelectorAll('.pr').forEach(function(e){e.classList.remove('ac')});b.classList.add('ac');document.getElementById('pm').value=x.p};c.appendChild(b)})}
+function gq(){var v=document.getElementById('qc').value,c=document.getElementById('qp');c.innerHTML='';if(v)new QRCode(c,{text:v,width:200,height:200,correctLevel:QRCode.CorrectLevel.H})}
+function gb(){var c=document.querySelector('#qp canvas');return c?c.toDataURL('image/png').split(',')[1]:null}
+async function gen(){var b=document.getElementById('gb'),o=document.getElementById('ou'),s=document.getElementById('ss'),a=document.getElementById('ac');b.disabled=true;b.textContent='GENERATING...';a.style.display='none';o.innerHTML='<div class="ld"></div>';s.textContent='Sending to Replicate...';s.className='st';var m=document.getElementById('md').value;var bd={model:m,prompt:document.getElementById('pm').value||P[0].p,negative_prompt:document.getElementById('np').value,qr_code_content:document.getElementById('qc').value,controlnet_conditioning_scale:parseFloat(document.getElementById('cs').value),guidance_scale:parseFloat(document.getElementById('gs').value),num_inference_steps:parseInt(document.getElementById('st').value),seed:parseInt(document.getElementById('sd').value)};if(m==='illusion')bd.qr_image_base64=gb();try{var r=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(bd)});var d=await r.json();if(d.status==='succeeded'){sr(d.output);return}if(d.status==='failed')throw new Error(d.error||'Failed');if(d.id){s.textContent='Processing...';await pl(d.id)}else throw new Error(d.error||'Unknown error')}catch(e){o.innerHTML='<div class="ph">'+e.message+'</div>';s.textContent='Error: '+e.message;s.className='st er'}finally{b.disabled=false;b.textContent='GENERATE'}}
+async function pl(id){var s=document.getElementById('ss');for(var i=0;i<60;i++){await new Promise(function(r){setTimeout(r,2000)});var r=await fetch('/api/poll?id='+id);var d=await r.json();if(d.status==='succeeded'){sr(d.output);return}if(d.status==='failed')throw new Error(d.error||'Failed');s.textContent='Processing... ('+(i*2)+'s)'}throw new Error('Timed out')}
+function sr(out){var u=Array.isArray(out)?out[0]:out;R=u;document.getElementById('ou').innerHTML='<img src="'+u+'" alt="AI QR">';document.getElementById('ss').textContent='Done - scan with your phone camera';document.getElementById('ss').className='st ok';document.getElementById('ac').style.display='flex'}
+function dl(){if(!R)return;var a=document.createElement('a');a.href=R;a.download='qr-forge-'+Date.now()+'.png';a.target='_blank';a.click()}
+function ts(){alert('Point your phone camera at the QR code on screen. iOS Camera and WeChat scanner are most tolerant.')}
+document.getElementById('qc').addEventListener('input',gq);ip();gq();
+</script>
+</body>
+</html>
